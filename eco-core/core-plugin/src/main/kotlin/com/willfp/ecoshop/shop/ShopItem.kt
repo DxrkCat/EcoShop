@@ -633,9 +633,16 @@ fun Collection<ItemStack>.sell(
     for (itemStack in this) {
         if (!itemStack.isSellable(player)) {
             unsold += itemStack
+            continue
         }
 
         val price = itemStack.getUnitSellValue(player)
+        
+        if (itemStack.shopItem == null || itemStack.shopItem!!.sellPrice == null) {
+            unsold += itemStack
+            continue
+        }
+        
         val item = itemStack.shopItem!!
 
         val event = EcoShopSellEvent(player, item, item.sellPrice!!, itemStack)
